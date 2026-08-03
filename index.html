@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>おかん無双 第1話「体操服がない」</title>
 <!--
@@ -25,6 +25,10 @@ html,body{margin:0;padding:0;height:100%;background:#1B1410;overflow:hidden;
   -webkit-user-select:none;user-select:none;-webkit-text-size-adjust:100%}
 body{display:flex;justify-content:center;align-items:center}
 img{display:block;-webkit-user-drag:none;user-drag:none}
+button{font:inherit}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;
+  margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;border:0!important}
 
 :root{
   --line:#4A3128;          /* 輪郭線のダークブラウン */
@@ -65,17 +69,19 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 #bandTxt{position:absolute;left:0;top:16%;width:66%;height:68%;
   padding:0 6% 0 11%;display:flex;flex-direction:column;
   justify-content:center;align-items:flex-start;pointer-events:none;overflow:hidden}
-#bandTxt .ep{font-size:.108em;color:#8A7255;letter-spacing:.06em;line-height:1.15;white-space:nowrap}
+#bandTxt .ep{font-size:.108em;color:#6B5944;letter-spacing:.06em;line-height:1.15;white-space:nowrap}
 #bandTxt .ti{font-size:.205em;font-weight:800;color:#3B2A1E;letter-spacing:.005em;
   line-height:1.22;white-space:nowrap}
 .topbtn{position:absolute;top:24%;width:12.3%;aspect-ratio:1/1;border:none;padding:0;border-radius:50%;
-  background:#F0A63C;box-shadow:0 3px 0 rgba(0,0,0,.16);cursor:pointer;
+  background:#C56A18;box-shadow:0 3px 0 rgba(0,0,0,.16);cursor:pointer;
   display:flex;align-items:center;justify-content:center;overflow:hidden;isolation:isolate;
-  touch-action:manipulation}
+  touch-action:manipulation;min-width:44px;min-height:44px}
 #btnSound{left:68.2%}
-#btnReset{left:84.9%;background:#7FB069}
+#btnReset{left:84.9%;background:#5F8F4D}
 .topbtn svg{width:60%;height:60%;fill:#fff}
 .topbtn.is-pressed{transform:scaleX(1.12) scaleY(.88);transition:transform 60ms ease-out}
+.topbtn:focus-visible,.btnimg:focus-visible,.chip:focus-visible,.hitrect:focus-visible,
+#bookClose:focus-visible{outline:4px solid #155EEF;outline-offset:3px}
 .ripple{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.30);
   transform:scale(0);animation:rp 225ms linear forwards}
 @keyframes rp{to{transform:scale(1);opacity:0}}
@@ -126,6 +132,9 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 .actor img.sp,.prop img.sp{position:absolute;inset:0;width:100%;height:100%;
   object-fit:contain;object-position:50% 100%}
 .actor.hit,.prop.hit{pointer-events:auto;cursor:pointer}
+.hitrect{min-width:44px;min-height:44px;border-radius:8px}
+.hitrect.keyboard-drop{outline:4px dashed #155EEF;outline-offset:-4px;
+  background:rgba(255,255,255,.18)}
 .shadow{position:absolute;left:50%;bottom:0;transform:translateX(-50%);
   width:62%;aspect-ratio:3/1;border-radius:50%;background:rgba(74,49,40,.16);pointer-events:none}
 #world.sepia{filter:sepia(.88) contrast(.94) saturate(.72)}
@@ -335,6 +344,9 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
   justify-content:center;cursor:grab;touch-action:none;flex:0 0 auto}
 .chip img{height:100%;width:auto;filter:drop-shadow(0 2px 0 rgba(74,49,40,.14))}
 .chip.gone{opacity:0;pointer-events:none}
+.chip.keyboard-selected{border-radius:10px;outline:4px solid #155EEF;outline-offset:2px;
+  background:rgba(255,255,255,.7)}
+#app.ending #slots,#app.result-open #slots{visibility:hidden;pointer-events:none}
 @keyframes slotflash{0%{filter:brightness(1)}30%{filter:brightness(2.4)}100%{filter:brightness(1)}}
 .chip.flash img{animation:slotflash .5s ease-out}
 
@@ -359,7 +371,7 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 #popBurstIn{width:100%;height:100%;transform:scale(0);opacity:0}
 #popBurstIn img{width:100%;height:100%;object-fit:contain}
 #credit{position:fixed;left:0;right:0;bottom:2px;text-align:center;z-index:5;
-  font-size:9px;color:rgba(122,101,80,.5);pointer-events:none}
+  font-size:9px;color:#7A6550;pointer-events:none}
 #dragGhost{position:fixed;left:0;top:0;width:16%;pointer-events:none;z-index:200;opacity:0;
   transform:translate(-50%,-50%)}
 #dragGhostBox{width:100%;filter:drop-shadow(0 8px 6px rgba(40,25,15,.35))}
@@ -368,12 +380,13 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 #endPanel{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
   flex-direction:column;pointer-events:auto;z-index:95}
 #endPanel.on{display:flex}
-#resultCard{position:relative;width:68%;max-width:320px;aspect-ratio:3/4;
+#resultCard{position:relative;height:min(55%,426px);width:auto;max-width:68%;aspect-ratio:3/4;
   display:flex;flex-direction:column;align-items:center;justify-content:center;transform:scale(0)}
 #resultBg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
 #resultInner{position:relative;display:flex;flex-direction:column;align-items:center;gap:4%;width:100%}
 #resultSeal{width:44%;height:auto;transform:scale(0)}
-#resultTitle{font-size:clamp(15px,4.6vw,22px);font-weight:800;color:#3B2A1E}
+#resultTitle{width:78%;font-size:clamp(13px,4.2vw,21px);font-weight:800;color:#3B2A1E;
+  text-align:center;line-height:1.25;overflow-wrap:anywhere;word-break:break-all}
 #resultSub{font-size:clamp(11px,3.2vw,15px);color:#7A6550}
 /* オチのコメント（プレート＋バースト）。外=位置、中=アニメの分離は吹き出しと同じ作法 */
 #resultCommentWrap{position:relative;width:94%;max-width:380px;margin-top:3.5%}
@@ -383,13 +396,17 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 #resultComment{position:relative;z-index:1;transform:scale(0)}
 #resultComment>img{width:100%;height:auto;display:block}
 #resultCommentTxt{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  padding:2% 7% 2% 10%;font-weight:800;color:#3B2A1E;text-align:center;
+  padding:2% 7% 2% 16%;font-weight:800;color:#3B2A1E;text-align:center;
   font-size:clamp(13px,3.9vw,18px);line-height:1.5}
 .btnimg{position:relative;width:52%;max-width:230px;margin-top:6%;cursor:pointer;
-  transform:scale(0);touch-action:manipulation}
+  transform:scale(0);touch-action:manipulation;border:0;padding:0;background:transparent;
+  appearance:none;display:block;color:inherit}
 .btnimg img{width:100%;height:auto}
 .btnimg span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-  font-weight:800;color:#fff;font-size:clamp(13px,4vw,19px);text-shadow:0 2px 0 rgba(0,0,0,.22)}
+  font-weight:800;color:#fff;font-size:clamp(13px,4vw,19px);
+  text-shadow:-1px -1px 0 rgba(59,42,30,.72),1px -1px 0 rgba(59,42,30,.72),
+    -1px 1px 0 rgba(59,42,30,.72),1px 1px 0 rgba(59,42,30,.72),0 2px 0 rgba(0,0,0,.28)}
+.btnimg.is-pressed img{filter:brightness(.92);transform:translateY(2px) scale(.985)}
 /* リザルトのボタンは2つ並ぶ（もういちど＝この話をやり直す／つぎへ＝タイトルへ） */
 #endBtns{display:flex;align-items:center;justify-content:center;gap:5%;width:88%;margin-top:6%}
 #endBtns .btnimg{width:46%;max-width:168px;margin-top:0}
@@ -481,27 +498,44 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 
 /* エンドいちらん（タイトル右下の小ボタン＋一覧パネル） */
 #btnBook{position:absolute;right:3.5%;bottom:1.6%;width:34%;max-width:170px;cursor:pointer;
-  transform:none;touch-action:manipulation}
+  transform:none;touch-action:manipulation;min-height:44px}
 #btnBook span{font-size:clamp(10px,3vw,14px)}
 #bookPanel{position:absolute;inset:0;z-index:180;display:none;align-items:center;
   justify-content:center;background:rgba(24,16,10,.5)}
 #bookPanel.on{display:flex}
-#bookCard{width:88%;max-width:400px;max-height:86%;overflow-y:auto;background:#FFF9EC;
+#bookCard{position:relative;width:88%;max-width:400px;max-height:86%;overflow-y:auto;background:#FFF9EC;
   border:3px solid #4A3128;border-radius:18px;padding:4% 4% 3%;
   filter:drop-shadow(0 6px 0 rgba(74,49,40,.3))}
 #bookTitle{text-align:center;font-weight:800;color:#3B2A1E;font-size:clamp(15px,4.6vw,21px);
   margin-bottom:3%}
-#bookGrid{display:grid;grid-template-columns:1fr 1fr;gap:2.5%}
+#bookClose{position:absolute;right:8px;top:8px;width:44px;height:44px;border:2px solid #4A3128;
+  border-radius:50%;background:#fff;color:#3B2A1E;font-size:26px;font-weight:800;line-height:1;
+  cursor:pointer;z-index:2;box-shadow:0 2px 0 rgba(74,49,40,.2)}
+#bookGrid{display:grid;grid-template-columns:1fr 1fr;
+  column-gap:clamp(6px,2.5%,10px);row-gap:clamp(6px,2vw,10px)}
 .bkCell{display:flex;align-items:center;gap:5%;background:#FFFFFF;border:2px solid #E4D8C2;
-  border-radius:12px;padding:3% 4%;margin-bottom:2.5%}
+  border-radius:12px;padding:3% 4%;margin:0}
 .bkCell img{width:26%;height:auto;flex:0 0 auto}
 .bkCell .q{width:26%;aspect-ratio:1;flex:0 0 auto;border-radius:50%;background:#EFE6D2;
-  display:flex;align-items:center;justify-content:center;font-weight:800;color:#B7A88C;
+  display:flex;align-items:center;justify-content:center;font-weight:800;color:#5F4E3B;
   font-size:clamp(14px,4.4vw,20px)}
 .bkCell .tx{min-width:0}
 .bkCell .nm{font-weight:800;color:#3B2A1E;font-size:clamp(10px,2.9vw,13px);line-height:1.3}
-.bkCell .hint{color:#8A7255;font-size:clamp(9px,2.6vw,12px);line-height:1.35;margin-top:2px}
-#bookNote{text-align:center;color:#8A7255;font-size:clamp(9px,2.7vw,12px);margin-top:2%}
+.bkCell .hint{color:#7A6550;font-size:clamp(9px,2.6vw,12px);line-height:1.35;margin-top:2px}
+#bookNote{text-align:center;color:#7A6550;font-size:clamp(9px,2.7vw,12px);margin-top:3%}
+@media (max-width:350px){#bookGrid{grid-template-columns:1fr}}
+
+/* 縦長ゲームを横向きで無理に縮めず、端末を縦へ戻す案内を出す。 */
+#rotateNotice{position:absolute;inset:0;z-index:500;display:none;align-items:center;
+  justify-content:center;flex-direction:column;gap:18px;padding:24px;text-align:center;
+  color:#3B2A1E;background:#FFF9EC;font-weight:800;font-size:18px;line-height:1.6}
+.rotatePhone{width:54px;height:86px;border:4px solid #4A3128;border-radius:10px;
+  position:relative;transform:rotate(-90deg);animation:rotatehint 1.8s ease-in-out infinite}
+.rotatePhone::after{content:"";position:absolute;width:7px;height:7px;border-radius:50%;
+  background:#4A3128;left:50%;bottom:4px;transform:translateX(-50%)}
+@keyframes rotatehint{0%,25%{transform:rotate(-90deg)}75%,100%{transform:rotate(0)}}
+@media (orientation:landscape) and (max-height:600px){#rotateNotice{display:flex}}
+@media (prefers-reduced-motion:reduce){.rotatePhone{animation:none;transform:rotate(0)}}
 
 /* ローディング */
 #loading{position:absolute;inset:0;z-index:300;background:var(--cream);
@@ -509,7 +543,7 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 #loading.off{display:none}
 #loadBar{width:52%;height:8px;border-radius:4px;background:#E4D8C2;overflow:hidden}
 #loadFill{width:0;height:100%;background:#F0A63C;transition:width .2s linear}
-#loadMsg{font-size:13px;color:#8A7255}
+#loadMsg{font-size:13px;color:#6B5944}
 
 /* デバッグ表示（?debug=1） */
 .dbg .prop,.dbg .actor{outline:1px dashed rgba(255,0,0,.55)}
@@ -526,10 +560,10 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
   <div id="topbar">
     <img id="bandImg" data-asset="ui_band" alt="">
     <div id="bandTxt"><span class="ep">第1話</span><span class="ti">体操服がない</span></div>
-    <button id="btnSound" class="topbtn" aria-label="おと">
+    <button id="btnSound" class="topbtn" type="button" aria-label="音を消す" aria-pressed="false">
       <svg viewBox="0 0 24 24"><path id="icSound" d="M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
     </button>
-    <button id="btnReset" class="topbtn" aria-label="やりなおす">
+    <button id="btnReset" class="topbtn" type="button" aria-label="この話を最初からやりなおす">
       <svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
     </button>
   </div>
@@ -599,7 +633,8 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
       <div id="badTitle"><img data-asset="ui_badtitle" alt=""><span id="badTitleTxt"></span></div>
       <!-- オチのメッセージ（各エンドの締めの一言。おかん関与ならおかん宛て） -->
       <div id="caption"><span id="captionTxt"></span></div>
-      <div id="endPanel">
+      <div id="endPanel" role="dialog" aria-labelledby="resultTitle"
+           aria-describedby="resultCommentTxt" aria-hidden="true">
         <div id="resultCard">
           <img id="resultBg" data-asset="ui_result" alt="">
           <div id="resultInner">
@@ -614,8 +649,8 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
           <div id="resultComment"><img data-asset="ui_plate" alt=""><span id="resultCommentTxt"></span></div>
         </div>
         <div id="endBtns">
-          <div class="btnimg" id="btnAgain"><img data-asset="ui_again" alt=""><span>もういちど</span></div>
-          <div class="btnimg" id="btnNext"><img data-asset="ui_next" alt=""><span>つぎへ</span></div>
+          <button class="btnimg" id="btnAgain" type="button"><img data-asset="ui_again" alt=""><span>もういちど</span></button>
+          <button class="btnimg" id="btnNext" type="button"><img data-asset="ui_next" alt=""><span>つぎへ</span></button>
         </div>
       </div>
     </div>
@@ -636,13 +671,14 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
       <div id="logoStamp"><span>無双</span></div>
     </div>
     <div id="btnStartWrap">
-      <div class="btnimg" id="btnStart"><div id="btnStartIn"><img data-asset="ui_next" alt=""><span>はじめる</span></div></div>
+      <button class="btnimg" id="btnStart" type="button" aria-label="第1話をはじめる"><div id="btnStartIn"><img data-asset="ui_next" alt=""><span>はじめる</span></div></button>
     </div>
     <!-- エンドいちらん（集めたシール＋未達エンドのヒント。全エンド到達可能性の担保） -->
-    <div class="btnimg" id="btnBook"><img data-asset="ui_again" alt=""><span id="btnBookTxt">エンドいちらん</span></div>
+    <button class="btnimg" id="btnBook" type="button"><img data-asset="ui_again" alt=""><span id="btnBookTxt">エンドいちらん</span></button>
   </div>
 
-  <div id="bookPanel"><div id="bookCard">
+  <div id="bookPanel" role="dialog" aria-modal="true" aria-labelledby="bookTitle" aria-hidden="true"><div id="bookCard">
+    <button id="bookClose" type="button" aria-label="エンドいちらんを閉じる">×</button>
     <div id="bookTitle">エンドいちらん</div>
     <div id="bookGrid"></div>
     <div id="bookNote">？のところはヒントを参考にさがしてみてね</div>
@@ -650,11 +686,13 @@ img{display:block;-webkit-user-drag:none;user-drag:none}
 
   <!-- ============ エピソードタイトルカード（はじめる 直後に出る）。
        セリフはゲーム中に出さず、状況説明の文字はこのカードに集約する（v4） ============ -->
-  <div id="epCard"><div id="epCardIn">
+  <div id="epCard" role="status" aria-live="polite"><div id="epCardIn">
     <img data-asset="ui_band" alt=""><span>第一話　体操服がない</span>
   </div><div id="epLine">おかん、あと10分で<br>学校行かなあかんのに——</div></div>
 
   <div id="loading"><div id="loadBar"><div id="loadFill"></div></div><div id="loadMsg">よみこみちゅう</div></div>
+  <div id="rotateNotice" role="status"><div class="rotatePhone" aria-hidden="true"></div><div>画面を縦向きにして<br>遊んでね</div></div>
+  <div id="liveStatus" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
 </div>
 
@@ -1582,6 +1620,9 @@ window.SND_LOOP={"bgm": {"start": 1.0, "end": 53.9038}, "bgm_title": {"start": 1
 const QS = new URLSearchParams(location.search);
 const DEBUG = QS.has('debug');
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let keyboardMode = false;
+addEventListener('keydown', ()=>{ keyboardMode=true; }, true);
+addEventListener('pointerdown', ()=>{ keyboardMode=false; }, true);
 
 /* =========================================================================
    [1] 素材テーブル
@@ -2818,19 +2859,34 @@ function stageRipple(cx, cy){
   setTimeout(kill, 900);
 }
 function bindTap(el, fn){
-  let downT=0;
+  let downT=0, ignoreClick=false;
   el.addEventListener('pointerdown', (e)=>{
     downT = performance.now();
+    ignoreClick = false;
     el.classList.add('is-pressed');
     if(el.classList.contains('topbtn')) ripple(el, e.clientX, e.clientY);
     try{ el.setPointerCapture(e.pointerId); }catch(err){}
   });
-  el.addEventListener('pointercancel', ()=>el.classList.remove('is-pressed'));
-  el.addEventListener('pointerup', (e)=>{
+  el.addEventListener('pointercancel', ()=>{
+    ignoreClick = true;
     el.classList.remove('is-pressed');
-    if(performance.now()-downT > 900) return;
+  });
+  el.addEventListener('pointerup', ()=>{
+    ignoreClick = performance.now()-downT > 900;
+    el.classList.remove('is-pressed');
+  });
+  /* click を正規の発火点にすると、指・マウス・ネイティブ button のキーボード操作・
+     読み上げソフトの疑似クリックを同じ経路で扱える。 */
+  el.addEventListener('click', (e)=>{
+    if(ignoreClick){ ignoreClick=false; return; }
     fn(e);
   });
+  /* 透明な当たり矩形は div のため、button と同じ Enter / Space 動作を補う。 */
+  if(el.tagName !== 'BUTTON'){
+    el.addEventListener('keydown', (e)=>{
+      if((e.key==='Enter' || e.key===' ') && !e.repeat){ e.preventDefault(); el.click(); }
+    });
+  }
 }
 
 /* =========================================================================
@@ -2857,19 +2913,39 @@ const ITEMDEF = {
   fuku_fur:   {key:'fuku_fur',   label:'ねこ毛コート'}
 };
 let inventory = [];
+let keyboardItem = null;
+function announce(msg){
+  const live = $('#liveStatus');
+  if(!live) return;
+  live.textContent='';
+  requestAnimationFrame(()=>{ live.textContent=msg || ''; });
+}
 function chipOf(id){ return document.getElementById('chip_'+id); }
 function addChip(id){
   if(inventory.indexOf(id)>=0) return chipOf(id);
   inventory.push(id);
   const d = document.createElement('div');
   d.className='chip'; d.id='chip_'+id; d.dataset.item=id;
+  d.setAttribute('role','button');
+  d.setAttribute('tabindex','0');
+  d.setAttribute('aria-pressed','false');
+  d.setAttribute('aria-label', ITEMDEF[id].label+'を選ぶ');
   const im = document.createElement('img'); im.src = srcOf(ITEMDEF[id].key); im.alt='';
   d.appendChild(im);
   $('#slots').appendChild(d);
   bindDrag(d, id);
+  /* ドラッグできない環境では Enter / Space でアイテムを選び、対象を決定できる。 */
+  d.addEventListener('keydown', (e)=>{
+    if((e.key==='Enter' || e.key===' ') && !e.repeat){ e.preventDefault(); d.click(); }
+  });
+  d.addEventListener('click', (e)=>{
+    if(e.detail!==0 || S.busy || S.ended) return;  // 指のドラッグ終了で選択しない
+    setKeyboardItem(keyboardItem===id ? null : id);
+  });
   return d;
 }
 function removeChip(id){
+  if(keyboardItem===id) setKeyboardItem(null);
   const c=chipOf(id); if(c) c.remove();
   inventory = inventory.filter(v=>v!==id);
 }
@@ -2939,7 +3015,38 @@ async function acquire(itemId, fromRec){
    [14] ドラッグ&ドロップ（Pointer Events）
    ========================================================================= */
 const DROPS = [];   // {el(当たり矩形), rec(脈打つ絵), accepts:[itemId], run:async fn}
-function addDrop(el, rec, accepts, run){ DROPS.push({el, rec, accepts, run}); }
+function updateKeyboardDropTarget(d){
+  if(!d || !d.el) return;
+  const ok = !!keyboardItem && d.accepts.indexOf(keyboardItem)>=0;
+  d.el.classList.toggle('keyboard-drop', ok);
+  const base = d.el.dataset.baseLabel || d.el.getAttribute('aria-label') || '';
+  d.el.setAttribute('aria-label', ok ? base+'（'+ITEMDEF[keyboardItem].label+'を使う）' : base);
+}
+function setKeyboardItem(id){
+  keyboardItem = id || null;
+  document.querySelectorAll('.chip').forEach(c=>{
+    const on = c.dataset.item===keyboardItem;
+    c.classList.toggle('keyboard-selected', on);
+    c.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  DROPS.forEach(updateKeyboardDropTarget);
+  announce(keyboardItem ? ITEMDEF[keyboardItem].label+'を選びました。使う場所を選んでください'
+                        : 'アイテムの選択を解除しました');
+}
+function useKeyboardItemOn(el){
+  if(!keyboardItem) return false;
+  const item = keyboardItem;
+  const d = DROPS.find(v=>v.el===el && v.accepts.indexOf(item)>=0);
+  if(!d){ announce(ITEMDEF[item].label+'は、ここでは使えません'); return true; }
+  setKeyboardItem(null);
+  d.run(item);
+  return true;
+}
+function addDrop(el, rec, accepts, run){
+  const d={el, rec, accepts, run};
+  DROPS.push(d);
+  updateKeyboardDropTarget(d);
+}
 function markTargets(itemId, on){
   /* v3: ドロップ先が脈打つ「ここに使うんだよ」ヒントは廃止（謎解きにならないため）。
      関数は呼び出し側の形を保つために残してある。 */
@@ -3117,9 +3224,18 @@ function buildLiving(){
   startIdleRigs();
 }
 function hit(el, fn){
-  bindTap(el, (e)=>{ if(S.busy||S.ended) return; fn(e); });
+  bindTap(el, (e)=>{
+    if(S.busy||S.ended) return;
+    if(useKeyboardItemOn(el)) return;
+    fn(e);
+  });
 }
 const HITS = {};
+const HIT_LABELS = {
+  hitSon:'息子', hitRemote:'リモコン', hitPile:'洗濯物の山', hitCat:'猫',
+  hitTv:'テレビ', hitDad:'父', hitGap:'ソファの下', hitWin:'窓',
+  hitTowels:'畳んだタオルの山', hitOkan:'おかん', hitShowa:'30年前の体操服'
+};
 function placeRect(el, sp){
   const M = BGMAP;
   const w = M.dw*sp.w/100, h = M.dh*(sp.h||6)/100;
@@ -3132,6 +3248,11 @@ function placeRect(el, sp){
 function mkHitRect(id, sp){
   const d=document.createElement('div');
   d.className='hitrect'; d.id=id;
+  const label=HIT_LABELS[id] || '調べる場所';
+  d.dataset.baseLabel=label;
+  d.setAttribute('role','button');
+  d.setAttribute('tabindex','0');
+  d.setAttribute('aria-label',label);
   d.style.cssText=`position:absolute;z-index:${sp.z||20};pointer-events:auto;cursor:pointer;
     touch-action:manipulation`;
   placeRect(d, sp);
@@ -3865,6 +3986,7 @@ function stopSmear(){
 async function musouEnd(){
   if(S.ended) return;
   S.busy = true; S.ended = true; S.moves++;
+  $('#app').classList.add('ending');
   const ep = S.epoch;
   removeChip('fuku_wet');
   const ok = SPR.okan, son = SPR.son;
@@ -4129,6 +4251,7 @@ async function sepiaPhoto(title){
 async function badEndSchool(){
   if(S.ended) return;
   S.busy = true; S.ended = true; S.moves++;
+  $('#app').classList.add('ending');
   const ep = S.epoch;
   removeChip('fuku_showa');
 
@@ -4209,6 +4332,7 @@ async function stampSeal(key){
 function beginEnd(){
   if(S.ended) return null;
   S.busy = true; S.ended = true; S.moves++;
+  $('#app').classList.add('ending');
   return S.epoch;
 }
 /* 着替えの共通演出（一瞬・2コマ打ち） */
@@ -4621,7 +4745,13 @@ function showResult(sealKey, title, comment){
   cw.style.display = comment ? '' : 'none';
   cm.style.transform = 'scale(0)';
   bu.style.opacity = '0';
+  if(keyboardItem) setKeyboardItem(null);
+  $('#app').classList.add('result-open');
+  world.inert = true;
+  $('#itembar').inert = true;
   ep.classList.add('on');
+  ep.setAttribute('aria-hidden','false');
+  announce('エンド「'+title+'」。'+(comment || ''));
   A.animate($('#dim'), {opacity:[0,.42], duration:300});
   A.animate($('#resultCard'), {scale:[0,1.06,1], opacity:[0,1], duration:520, ease:'out(2.4)'});
   A.animate($('#resultSeal'), {scale:[0,1.2,1], rotate:[-140,0], duration:520, delay:260, ease:'out(3)'});
@@ -4640,6 +4770,9 @@ function showResult(sealKey, title, comment){
   }
   A.animate($('#btnAgain'),   {scale:[0,1.08,1], duration:420, delay:1650, ease:'out(3)'});
   A.animate($('#btnNext'),    {scale:[0,1.08,1], duration:420, delay:1750, ease:'out(3)'});
+  setTimeout(()=>{
+    if(keyboardMode && ep.classList.contains('on')) $('#btnAgain').focus({preventScroll:true});
+  }, 1800);
 }
 
 /* =========================================================================
@@ -4708,7 +4841,9 @@ function layoutTitle(){
   // ロゴはキャラの上の余白の真ん中に置く（縦長の画面で上に寄りすぎないように）
   const lg = $('#titleLogo'), top = H - H*TITLE.bottom - h;
   lg.style.top = '0px';
-  lg.style.top = Math.max(H*0.035, (top - lg.offsetHeight)/2).toFixed(1)+'px';
+  /* 顔アイコンは回転＋太い枠ぶん見かけの箱より上へ出るので、上端に余白を確保する。 */
+  const iconRoom = Math.min(W*0.190, H*0.110)*0.75;
+  lg.style.top = Math.max(H*0.035, iconRoom, (top - lg.offsetHeight)/2).toFixed(1)+'px';
 }
 function playTitleIntro(){
   const cols = TITLE.cols, logo = $('#logoMain'), stamp = $('#logoStamp'), btn = $('#btnStart');
@@ -4744,6 +4879,7 @@ function playTitleIntro(){
 /* タイトル ⇔ ステージ の行き来（フェード＋横スライド） */
 let sceneBusy = false;
 const gameLayers = ()=>[$('#topbar'), stage, $('#itembar')];
+function setGameLayersInert(on){ gameLayers().forEach(el=>{ el.inert=!!on; }); }
 function clearLayerStyle(){
   gameLayers().forEach(el=>{ el.style.transform=''; el.style.opacity=''; });
   const t = $('#title'); t.style.transform=''; t.style.opacity='';
@@ -4776,6 +4912,7 @@ async function startGame(){
   line.style.opacity='0';
   clearLayerStyle();
   S.onTitle = false;
+  setGameLayersInert(false);
   sceneBusy = false;
   relayout();
   // 開幕は文字なし。息子の汗と洗濯物の山だけで状況を伝える
@@ -4789,6 +4926,7 @@ async function backToTitle(){
   buildTitle();                 // 素材が後から入っても作り直せるように毎回組む
   layoutTitle();
   t.classList.remove('off');
+  setGameLayersInert(true);
   TITLE.cols.forEach(c=>{ c.style.opacity='1'; c.style.transform='none'; });
   Snd.fadeBGM('bgm_title', 420);
   A.animate(t, {x:['-24%','0%'], opacity:[0,1], duration:440, ease:'out(2)'});
@@ -4799,6 +4937,7 @@ async function backToTitle(){
   resetGame();
   playTitleIntro();
   sceneBusy = false;
+  setTimeout(()=>{ if(keyboardMode && S.onTitle) $('#btnStart').focus({preventScroll:true}); }, 1500);
 }
 
 /* =========================================================================
@@ -4813,15 +4952,25 @@ function resetGame(){
   if(okanWalkTimer){ clearInterval(okanWalkTimer); okanWalkTimer=null; }
   clearLiveTimers();          // 演出が張った setInterval を全部止める（Codexレビュー）
   /* 進行中の anime.js が opacity を書き戻さないよう、先にアニメを止める */
-  [$('#dim'), $('#godray'), $('#vignette'), $('#speedlines'), $('#windbox'), $('#caption')]
+  [$('#dim'), $('#godray'), $('#vignette'), $('#speedlines'), $('#windbox'), $('#caption'),
+   $('#endPanel'), $('#resultCard'), $('#resultSeal'), $('#resultComment'), $('#resultBurst'),
+   $('#btnAgain'), $('#btnNext')]
     .forEach(el=>{ try{ A.remove(el); }catch(e){} });
   Fx.reset(); Cam.reset();
   world.classList.remove('sepia');
   stage.classList.remove('photo-mode');
-  $('#endPanel').classList.remove('on');
-  try{ A.remove($('#endPanel')); }catch(e){}
+  const endPanel=$('#endPanel');
+  endPanel.classList.remove('on');
+  endPanel.setAttribute('aria-hidden','true');
   $('#endPanel').style.transform='';
-  $('#bookPanel').classList.remove('on');
+  $('#app').classList.remove('ending','result-open');
+  world.inert = false;
+  $('#itembar').inert = false;
+  if(keyboardItem) setKeyboardItem(null);
+  const bookPanel=$('#bookPanel');
+  bookPanel.classList.remove('on');
+  bookPanel.setAttribute('aria-hidden','true');
+  $('#title').inert = false;
   $('#photoWrap').style.display='none';
   $('#badTitle').style.display='none';
   $('#dim').style.opacity='0';
@@ -4835,6 +4984,7 @@ function resetGame(){
   $('#epCard').classList.remove('on');
   $('#slots').innerHTML='';
   inventory = [];
+  announce('この話を最初からやりなおしました');
   stage.querySelectorAll('.sealstamp').forEach(e=>e.remove());
   document.querySelectorAll('.fx-temp').forEach(e=>e.remove());
   scSchool.classList.add('off');
@@ -4849,9 +4999,30 @@ function resetGame(){
    [27] 起動
    ========================================================================= */
 function updateSoundIcon(){
+  const btn=$('#btnSound');
   $('#icSound').setAttribute('d', Snd.muted
     ? 'M4 9v6h4l5 4V5L8 9H4zm14.5 3l2.5-2.5-1-1L17.5 11 15 8.5l-1 1L16.5 12 14 14.5l1 1 2.5-2.5 2.5 2.5 1-1z'
     : 'M4 9v6h4l5 4V5L8 9H4zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z');
+  btn.setAttribute('aria-pressed', Snd.muted ? 'true' : 'false');
+  btn.setAttribute('aria-label', Snd.muted ? '音を出す' : '音を消す');
+}
+function openBook(){
+  Snd.play('tap_hit', .8);
+  buildBook();
+  const panel=$('#bookPanel');
+  panel.classList.add('on');
+  panel.setAttribute('aria-hidden','false');
+  $('#title').inert=true;
+  $('#bookClose').focus({preventScroll:true});
+}
+function closeBook(){
+  const panel=$('#bookPanel');
+  if(!panel.classList.contains('on')) return;
+  Snd.play('tap_soft', .7);
+  panel.classList.remove('on');
+  panel.setAttribute('aria-hidden','true');
+  $('#title').inert=false;
+  $('#btnBook').focus({preventScroll:true});
 }
 async function boot(){
   wavyBar();
@@ -4872,15 +5043,20 @@ async function boot(){
   bindTap($('#btnSound'), ()=>{ Snd.unlock(); Snd.toggle(); updateSoundIcon(); });
   // エンドいちらん（タイトルのみ）。外側タップで閉じる＝本家のかぶせパネル作法
   updateBookBtn();
-  bindTap($('#btnBook'), ()=>{ Snd.play('tap_hit', .8); buildBook(); $('#bookPanel').classList.add('on'); });
+  bindTap($('#btnBook'), openBook);
+  bindTap($('#bookClose'), closeBook);
   $('#bookPanel').addEventListener('pointerdown', (e)=>{
-    if(e.target === $('#bookPanel')){ Snd.play('tap_soft', .7); $('#bookPanel').classList.remove('on'); }
+    if(e.target === $('#bookPanel')) closeBook();
+  });
+  addEventListener('keydown', (e)=>{
+    if(e.key==='Escape' && $('#bookPanel').classList.contains('on')){ e.preventDefault(); closeBook(); }
   });
   // リセットはこの話の頭に戻すだけ（タイトルには戻さない）
   bindTap($('#btnReset'), ()=>{ Snd.unlock(); Snd.play('tap_hit', .9); resetGame(); });
   bindTap($('#btnAgain'), ()=>{ Snd.play('tap_hit', .9); resetGame(); });
   bindTap($('#btnNext'),  ()=>{ backToTitle(); });     // つぎへ＝タイトルへ戻る
   bindTap($('#btnStart'), ()=>{ startGame(); });
+  setGameLayersInert(true);
   playTitleIntro();
 
   const firstTouch = ()=>{
